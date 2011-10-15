@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import daemon, socket
+import os, sys, time
+from daemon import pidlockfile, DaemonContext
+
+WORKDIR = '/tmp/python_daemon'
+LOCKFILE = os.sep.join([WORKDIR, 'lockfile.pid'])
+SOCKFILE = os.sep.join([WORKDIR, 'socket.file'])
+
+class DelegateDaemon():
+	def __init__(self):
+		self.number = 0
+		self.__checkPaths__()
+		# self.__startDeamon__()
+		self.__connect__()
+		self.run()
+
+	def run(self):
+		while True:
+			self.__getData__()
+
+	def __startDeamon__(self):
+		self.stdout = open(os.sep.join([WORKDIR, 'stdout.log']), 'w')
+		self.stderr = open(os.sep.join([WORKDIR, 'stderr.log']), 'w')
+		self.daemon = DaemonContext(
+			working_directory=WORKDIR,
+			pidfile=pidlockfile.PIDLockFile(LOCKFILE),
+			stdout = self.stdout,
+			stderr = self.stderr,
+		)
+		self.daemon.open()
+
+	def __checkPaths__(self):
+		if not os.path.exists(WORKDIR):
+			os.makedirs(WORKDIR)
+		if os.path.exists(LOCKFILE):
+			sys.exit(1)
+		if os.path.exists(SOCKFILE):
+			os.remove(SOCKFILE)
+
+	def __connect__(self):
+		self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+		self.socket.bind(SOCKFILE)
+
+	def __getData__(self):
+		self.socket.listen(1)
+		self.conn, self.addr = self.socket.accept()
+		data = self.conn.recv(4096)
+		print 'DATA1: %s' % data
+
+		data = self.conn.recv(4096)
+		print 'DATA2: %s' % data
+
+if __name__ == '__main__':
+	DelegateDaemon()
