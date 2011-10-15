@@ -1,0 +1,14 @@
+#!/usr/bin/bash/env python
+# -*- coding:utf-8 -*-
+
+import readline, rlcompleter
+readline.parse_and_bind('tab:complete')
+
+# making foo variables
+t = 'text'
+l = [1,2,3]
+m = [[1,2,3],[4,5,6]]
+d = {'um':1, 'dois':2, 'tres':3}
+
+# making tutoo work easily
+import os,sys

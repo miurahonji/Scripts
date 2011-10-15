@@ -1,0 +1,223 @@
+"English vi
+	language messages C
+
+"Viewable text
+	set background=dark
+
+"Numbered lines
+"	set nu
+
+"Better (bash) completion
+	set wildmode=list:longest
+
+"Colorindo True, False e None em arquivos python
+	let python_highlight_all=1
+
+	set bufhidden=hide
+	set hidden
+
+"Python smart code folding
+	 "set foldmethod=indent
+
+"Indenting setting
+	set tabstop=4
+	set shiftwidth=4
+	set shiftround
+	set noexpandtab
+	set textwidth=79
+
+	" if exists("did_python_pep8")
+	" 	finish
+	" else
+	" 	let did_python_pep8=1
+	" endif
+	"Indenting this keywords when editting python files
+	au Filetype python set cinwords=if,elif,else,while,for,class,def,try,except
+
+"Searching setting
+	set ignorecase
+	set incsearch
+	set hlsearch
+"fold command setting
+	set foldenable
+	set foldmethod=manual
+	map <F7> za
+	map <F8> zf'a
+	hi Folded ctermbg=0
+
+"Visual setting
+	"autocmd BufReadPost,FileReadPost * call Mycolor(' ')
+	"autocmd BufReadPost,FileReadPost * map <F5> :call Mycolor()<CR>
+	syntax on
+
+	"Press <F9> to change color comment
+	map <F9> :call Read_Comment()<CR>
+	let g:color_number=4
+	function! Read_Comment()
+		if g:color_number == 4
+			hi Comment ctermfg=6
+			let g:color_number=6
+		else
+			hi clear Comment
+			hi Comment ctermfg=4
+			let g:color_number=4
+		endif
+	endfunction
+
+	"Function resume.txt, color used these documents.
+	"O wireless.txt foi adicionado temporariamente.
+	au BufReadPost,FileReadPost,BufNewFile resumo.txt,*.fis,wireless.txt call Resumo()
+	function! Resumo()
+		syntax match r_variavel   display "^\..*:"
+		syntax match r_topico     display "^:.*:"
+		syntax match r_comentario display "#.*"
+		highlight def link r_comentario Comment
+		highlight r_variavel term=bold ctermfg=1
+		highlight r_topico   term=bold ctermfg=3
+	endfunction
+
+"Tools cool
+	"map <F6> :call SendMail()<CR>
+
+"Working faster
+	set autowrite
+	set autoindent
+	set smartindent
+	set fo=croql
+	set noremap
+	map <F2> <C-^>
+	map <F3> :buffers<CR>
+	map <F4> :registers<CR>
+	map <F5> g<C-]>
+	map <F6> <C-T>
+	map <SPACE> i<SPACE><ESC>l
+
+	"Comment line
+	let g:spellOn = 'False'
+	map <F11> :call ToggleSpell()<CR>
+	function! ToggleSpell()
+		if g:spellOn == 'True'
+			set nospell
+			let g:spellOn = 'False'
+			echo 'Spell Off'
+		else
+			set spell
+			let g:spellOn = 'True'
+			echo 'Spell On'
+		endif
+	endfunction
+
+	"Comment line
+	hi ColorColumn term=reverse ctermfg=0 ctermbg=7
+	let g:match80 = 'False'
+	map <F10> :call ToggleMatch80()<CR>
+	function! ToggleMatch80()
+		if g:match80 == 'True'
+			match none
+			let g:match80 = 'False'
+			echo 'Match +80 off'
+		else
+			match ColorColumn /\%>80v.\+/ 
+			let g:match80 = 'True'
+			echo 'Match +80 on'
+		endif
+	endfunction
+
+	au BufReadPost,FileReadPost,BufNewFile COMMIT_EDITMSG set spell
+	au BufReadPost,FileReadPost,BufNewFile tags set noexpandtab
+
+	au StdinReadPost * map q :q!<CR>
+
+"Cabeçalho nos arquivos python em vim!
+"	au BufNewFile *.py call PyHeaderInsert()
+"	function! PyHeaderInsert()
+"		read ~/.vim/pyheader.vim
+"		0 delete
+"		:10
+"	endfunction
+
+""Colorindo True, False e None em arquivos python
+	"au BufReadPost,FileReadPost,BufNewFile *.py call AditionalPythonSyntax()
+	"function AditionalPythonSyntax()
+		"syntax match py_keyword display "True"
+		"syntax match py_keyword display "False"
+		"syntax match py_keyword display "None"
+		"highlight def link py_keyword Label
+	"endfunction
+
+	command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+	function! s:RunShellCommand(cmdline)
+		botright new
+		setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+		setlocal nowrap
+		call setline(1,a:cmdline)
+		call setline(2,substitute(a:cmdline,'.','=','g'))
+		execute 'silent 2read !'.escape(a:cmdline,'%#')
+		setlocal nomodifiable
+		1
+	endfunction
+
+"highlight python
+	au Filetype python syntax match error_space display "\(^\t\+ \+\|^ \+\t\+\|\s\+$\)" | highlight def link error_space Error
+	let python_highlight_builtins = 1
+	let python_highlight_numbers = 1
+
+"highlight for sablecc
+	augroup filetypedetect
+	au BufNewFile,BufRead *.sablecc setf sablecc
+	augroup END
+
+	" Return the current word, uses spaces to delimitate
+	function! GetNearestWord()
+		let c = col ('.')-1
+		let l = line('.')
+		let ll = getline(l)
+		let ll1 = strpart(ll,0,c)
+		let ll1 = matchstr(ll1,'\S*$')
+		let ll2 = strpart(ll,c,strlen(ll)-c+1)
+		let ll2 = strpart(ll2,0,match(ll2,'$\|\s'))
+		""echo ll1.ll2
+		return ll1.ll2
+	endfunction
+
+	" Return the word before the cursor, uses spaces to delimitate
+	" Rem : <cword> is the word under or after the cursor
+	function! GetCurrentWord()
+		let c = col ('.')-1
+		let l = line('.')
+		let ll = getline(l)
+		let ll1 = strpart(ll,0,c)
+		let ll1 = matchstr(ll1,'\S*$')
+		if strlen(ll1) == 0
+			return ll1
+		else
+			let ll2 = strpart(ll,c,strlen(ll)-c+1)
+			let ll2 = strpart(ll2,0,match(ll2,'$\|\s'))
+			return ll1.ll2
+		endif
+	endfunction
+
+	" Extract the word before the cursor, 
+	" use keyword definitions, skip latter spaces (see "bla word_accepted ")
+	function! GetPreviousWord()
+		let lig = getline(line('.'))
+		let lig = strpart(lig,0,col('.')-1)
+		return matchstr(lig, '\<\k*\>\s*$')
+	endfunction
+		
+	"Tab Complete
+	let g:tabcomplete = 1
+	if exists('g:tabcomplete') && g:tabcomplete == 1
+		inoremap <TAB> <C-R>=TabComplete()<CR>
+		inoremap <C-X><C-I> <TAB>
+		function! TabComplete()
+			let len = strlen(GetCurrentWord())
+			if len == 0
+				return "\<TAB>"
+			else
+				return "\<C-P>"
+		endfunction
+	endif
+
+	:command! CtagsPython !ctags --langdef=Python --recurse=yes --links=no --python-kinds=-i .
+	let @c = "BugID: BUGID\nAuthor of Code: Roberto Miura Honji (rmhonji@br.ibm.com)\nuserVisibleChange: No"

@@ -1,0 +1,74 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+export PS1="\[\033[01;32m\]\u@\h\[\033[01;34m\] \w $\[\033[00m\] "
+export CVS_RSH="ssh"
+export PYTHONSTARTUP="/home/roberto/.pythonrc"
+export EDITOR="/usr/bin/vim"
+
+
+# User specific aliases and functions
+
+# AUTH through BSO
+alias auth-abat="bsoauth mcpabat.ltc.austin.ibm.com"
+alias auth-hub1='bsoauth mcpkjhub1.ltc.austin.ibm.com'
+alias auth-dev1="bsoauth mcpkjdev1.ltc.austin.ibm.com"
+
+# SSH alias for all machines
+alias ssh-abat="ssh root@mcpabat.ltc.austin.ibm.com"
+alias ssh-hub1="ssh honji@mcpkjhub1.ltc.austin.ibm.com"
+alias ssh-host="ssh honji@mcphost.ltc.austin.ibm.com"
+alias ssh-dev1="ssh honji@mcpkjdev1.ltc.austin.ibm.com"
+alias ssh-quasar="ssh roberto@quasar.las.ic.unicamp.br"
+alias ssh-pulsar="ssh roberto@pulsar.itautec.inovasoft.unicamp.br"
+
+alias scp-abat="~/scripts/scp-script.sh abat"
+alias scp-hub1="~/scripts/scp-script.sh hub1"
+alias scp-dev1="~/scripts/scp-script.sh dev1"
+alias scp-quasar="~/scripts/scp-script.sh quasar"
+alias scp-everest="~/scripts/scp-script.sh everest"
+alias scp-pulsar="~/scripts/scp-script.sh pulsar"
+alias kill-notes="ps aux | sed -e '/notes/!d' -e 's/[a-zA-Z]\+\s\+\([0-9]\+\).*/\1/' | while read pid; do kill -9 \$pid; done"
+
+alias getlyric="~/scripts/filterLyrics.py"
+
+export LD_PRELOAD=/home/roberto/lib/mymemcpy.so
+
+alias encfs='encfs /mnt/gentoo/home/roberto/.encrypt/ /home/roberto/data'
+alias ps-group='ps x -o pid,pgid,comm'
+alias less='vim -'
+alias convert2mp3='~/scripts/convert2mp3.sh'
+alias order-music='~/scripts/music-order.py'
+alias tap='synclient TapButton1=1 VertEdgeScroll=0 HorizEdgeScroll=0'
+alias vim='vimx'
+
+pgrep(){
+	filter=${1}
+	echo -e 'PID  PGID COMMAND'
+	ps x -o pid,pgid,args | sed -r -e "/${filter}/!d" -e 's/\s+/ /g' -e 's/ ([0-9]+) ([0-9]+) ([^ ]+) [^$]*/\1 \2 \3/'
+}
+
+playall(){
+	for i in *.mp3 *.m4a; do
+		clear
+		if test -e lyrics/"${i/.mp3/.lyric}"; then
+			cat lyrics/"${i/.mp3/.lyric}"
+		else
+			test -e lyrics/"${i/.m4a/.lyric}" && {
+				cat lyrics/"${i/.m4a/.lyric}"
+			}
+		fi
+		mplayer "$i" > /dev/null 2>&1 || break
+		echo
+		echo
+	done
+}
+
+getalllyric(){
+	for i in *.mp3; do
+		~/scripts/filterLyrics.py "$i"
+	done
+}
