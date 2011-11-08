@@ -1,0 +1,7 @@
+caption always "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= @%H - %LD %d %LM - %c"
+multiuser on
+aclchg READERS +r-wx "#"
+aclchg READERS -rwx "?"
+aclchg READERS +x colon,license,windows,next,prev,select,other,detach,suspend,redisplay,lastmsg,windowlist,help,stuff
+
+aclumask "*"-rwx READERS+r-wx roberto+rwx "?" "?"-rwx "??"-rwx

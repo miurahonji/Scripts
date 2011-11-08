@@ -4,11 +4,15 @@
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
+
 export PS1="\[\033[01;32m\]\u@\h\[\033[01;34m\] \w $\[\033[00m\] "
 export CVS_RSH="ssh"
-export PYTHONSTARTUP="/home/roberto/.pythonrc"
-export EDITOR="/usr/bin/vim"
-
+export PYTHONSTARTUP="$HOME/.pythonrc"
+if [ -f /usr/bin/vimx ]; then
+	export EDITOR="/usr/bin/vimx"
+else
+	export EDITOR="/usr/bin/vim"
+fi
 
 # User specific aliases and functions
 
@@ -44,6 +48,10 @@ alias convert2mp3='~/scripts/convert2mp3.sh'
 alias order-music='~/scripts/music-order.py'
 alias tap='synclient TapButton1=1 VertEdgeScroll=0 HorizEdgeScroll=0'
 alias vim='vimx'
+alias yumc='sudo yum -C'
+alias lsof-ports='sudo lsof -i'
+alias netstat-ports='sudo netstat -lptu'
+alias mscreen="screen -c $HOME/.multiscreenrc"
 
 pgrep(){
 	filter=${1}
