@@ -1,18 +1,28 @@
 # .bashrc
 
+shopt -s extglob
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
+if [ -e /home/honji ]; then
+	export HOME=/home/honji
+fi
+
 
 export PS1="\[\033[01;32m\]\u@\h\[\033[01;34m\] \w $\[\033[00m\] "
 export CVS_RSH="ssh"
 export PYTHONSTARTUP="$HOME/.pythonrc"
+export GSA_DIR=/gsa/ausgsa/home/h/o/honji
+export PATH+=":$HOME/bin"
+
 if [ -f /usr/bin/vimx ]; then
-	export EDITOR="/usr/bin/vimx"
+	export EDITOR="/usr/bin/vimx -i ~/.viminfo_$HOSTNAME"
 else
-	export EDITOR="/usr/bin/vim"
+	export EDITOR="/usr/bin/vim -i ~/.viminfo_$HOSTNAME"
 fi
+
 
 # User specific aliases and functions
 
@@ -39,7 +49,10 @@ alias kill-notes="ps aux | sed -e '/notes/!d' -e 's/[a-zA-Z]\+\s\+\([0-9]\+\).*/
 
 alias getlyric="~/scripts/filterLyrics.py"
 
-export LD_PRELOAD=/home/roberto/lib/mymemcpy.so
+MYMEMCPY="$HOME/lib/mymemcpy.so"
+if [ -e  $MYMEMCPY ]; then
+	export LD_PRELOAD="$MYMEMCPY"
+fi
 
 alias encfs='encfs /mnt/gentoo/home/roberto/.encrypt/ /home/roberto/data'
 alias ps-group='ps x -o pid,pgid,comm'
@@ -47,11 +60,53 @@ alias less='vim -'
 alias convert2mp3='~/scripts/convert2mp3.sh'
 alias order-music='~/scripts/music-order.py'
 alias tap='synclient TapButton1=1 VertEdgeScroll=0 HorizEdgeScroll=0'
-alias vim='vimx'
+alias vim="$EDITOR"
 alias yumc='sudo yum -C'
 alias lsof-ports='sudo lsof -i'
 alias netstat-ports='sudo netstat -lptu'
 alias mscreen="screen -c $HOME/.multiscreenrc"
+
+# WORK ALIAS
+alias cvs-package="cvs -d :ext:rmhonji@cvs.opensource.ibm.com:/cvsroot/littleb checkout -P"
+alias cvs-update='cvs update -d -P'
+alias cvs-diff='CVSDiff'
+alias merge-rhel="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/rhel-mass-merge.sh makefile"
+alias merge-tools="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/mcp7.1-merge.sh"
+alias make-scratch="make CUSTOMER=mcp7.1-base srpm-scratch-build"
+alias make-rpm-scratch="make CUSTOMER=mcp7.1-base scratch-build"
+alias make-official="make CUSTOMER=mcp7.1-base tag build"
+alias mysql-hub1="mysql --host=mcpkjhub1.ltc.austin.ibm.com --user=guest --password=mcpekjhub1 mcpe"
+alias mysql-host="mysql --host=mcphost.ltc.austin.ibm.com --user=guest --password=mcpehost mcpe"
+alias vim-bash='vim ~/.bashrc && source ~/.bashrc'
+alias ctags-python='ctags --langdef=Python --recurse=yes --links=no --python-kinds=-i .'
+
+# Functions
+run_build() {
+	LOG_FILE="/tmp/build_rmhonji.log"
+	./build_project "$@" > $LOG_FILE 2>&1 &
+	sleep 10
+	tailf $( find $( cat $LOG_FILE | sed -r -e '/run_nn_builder: generating customer deliverables in/!d' -e "s/^[^']+'//" -e "s/'.*$//" ) -iname *-build.log )
+	cat $LOG_FILE
+}
+
+CVSDiff(){
+	find . -iname *.pyc |\
+	while read file; do
+		rm $file
+	done
+	cvs diff -Nu $@
+}
+	
+bugpack(){
+	git_repo="$1"
+	TEMP_DIR="git_temp"
+	git clone $git_repo ${TEMP_DIR}
+	VERSION="$( test -e ${TEMP_DIR}/version && cat ${TEMP_DIR}/version )"
+	rm -rf ${TEMP_DIR}/.git
+	NEW_DIR="$( basename $git_repo )_${VERSION}"
+	mv ${TEMP_DIR} ${NEW_DIR}
+	tar cjvf ${NEW_DIR}.tar.bz2 ${NEW_DIR}
+}
 
 pgrep(){
 	filter=${1}
