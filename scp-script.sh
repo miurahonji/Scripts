@@ -13,22 +13,22 @@ test -z "$2" && usage
 
 case "$1" in
 	quasar) 
-		SERVER="quasar.las.ic.unicamp.br" 
+		SERVER="quasar.las.ic.unicamp.br:~/" 
 		USER="roberto" ;;
 	pulsar) 
-		SERVER="pulsar.itautec.inovasoft.unicamp.br" 
+		SERVER="pulsar.itautec.inovasoft.unicamp.br:~/"
 		USER="roberto" ;;
 	everest) 
-		SERVER="www.las.ic.unicamp.br" 
+		SERVER="www.las.ic.unicamp.br:~/" 
 		USER="roberto" ;;
 	hub1) 
-		SERVER="mcpkjhub1.ltc.austin.ibm.com" 
+		SERVER="mcpkjhub1.ltc.austin.ibm.com:~/" 
 		USER="honji" ;;
 	dev1) 
-		SERVER="mcpkjdev1.ltc.austin.ibm.com" 
+		SERVER="mcpkjdev1.ltc.austin.ibm.com:~/" 
 		USER="honji" ;;
 	abat)
-		SERVER="mcpabat.ltc.austin.ibm.com"
+		SERVER="mcpabat.ltc.austin.ibm.com:/home/rmhonji/"
 		USER="root" ;;
 	*) 
 		echo "Server $1 not found"
@@ -38,7 +38,7 @@ esac
 __PATH__="$2"
 
 test "$3" == "send" && {
-	scp -r ${__PATH__} ${USER}@${SERVER}:~/ && echo "Stored at ${SERVER}:~/"
+	scp -r ${__PATH__} ${USER}@${SERVER} && echo "Stored at ${SERVER}"
 	exit ${?}
 }
 

@@ -4,7 +4,7 @@ aclchg READERS +r-wx "#"
 aclchg READERS -rwx "?"
 aclchg READERS +x colon,license,windows,next,prev,select,other,detach,suspend,redisplay,lastmsg,windowlist,help,stuff
 
-aclumask "*"-rwx READERS+r-wx $USER+rwx "?" "?"-rwx "??"-rwx
+aclumask "*"-rwx READERS+r-wx rmhonji+rwx honji+rwx roberto+rwx "?" "?"-rwx "??"-rwx
 
 if [ -n "$ALLOWED_USERS" ]; then
 	aclgrp $ALLOWED_USERS READERS
