@@ -22,13 +22,13 @@ case "$1" in
 		SERVER="www.las.ic.unicamp.br:~/" 
 		USER="roberto" ;;
 	hub1) 
-		SERVER="mcpkjhub1.ltc.austin.ibm.com:~/" 
+		SERVER="mcpkjhub1.austin.ibm.com:~/" 
 		USER="honji" ;;
 	dev1) 
-		SERVER="mcpkjdev1.ltc.austin.ibm.com:~/" 
+		SERVER="mcpkjdev1.austin.ibm.com:~/" 
 		USER="honji" ;;
 	abat)
-		SERVER="mcpabat.ltc.austin.ibm.com:/home/rmhonji/"
+		SERVER="mcpabat.austin.ibm.com:/home/rmhonji/"
 		USER="root" ;;
 	*) 
 		echo "Server $1 not found"
@@ -44,5 +44,5 @@ test "$3" == "send" && {
 
 STORE="/tmp/$1"
 mkdir -p ${STORE}
-scp -r $USER@${SERVER}:${__PATH__} ${STORE} && echo "Stored at ${STORE}"
+scp -r $USER@$( echo ${SERVER} | cut -d : -f1 ):${__PATH__} ${STORE} && echo "Stored at ${STORE}"
 exit ${?}

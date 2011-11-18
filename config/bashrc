@@ -27,15 +27,16 @@ fi
 # User specific aliases and functions
 
 # AUTH through BSO
-alias auth-abat="bsoauth mcpabat.ltc.austin.ibm.com"
-alias auth-hub1='bsoauth mcpkjhub1.ltc.austin.ibm.com'
-alias auth-dev1="bsoauth mcpkjdev1.ltc.austin.ibm.com"
+alias auth-abat="bsoauth mcpabat.austin.ibm.com"
+alias auth-hub1='bsoauth mcpkjhub1.austin.ibm.com'
+alias auth-hub1-ip='bsoauth 9.3.191.233'
+alias auth-dev1="bsoauth mcpkjdev1.austin.ibm.com"
 
 # SSH alias for all machines
-alias ssh-abat="ssh root@mcpabat.ltc.austin.ibm.com"
-alias ssh-hub1="ssh honji@mcpkjhub1.ltc.austin.ibm.com"
-alias ssh-host="ssh honji@mcphost.ltc.austin.ibm.com"
-alias ssh-dev1="ssh honji@mcpkjdev1.ltc.austin.ibm.com"
+alias ssh-abat="ssh root@mcpabat.austin.ibm.com"
+alias ssh-hub1="ssh honji@mcpkjhub1.austin.ibm.com"
+alias ssh-host="ssh honji@mcphost.austin.ibm.com"
+alias ssh-dev1="ssh honji@mcpkjdev1.austin.ibm.com"
 alias ssh-quasar="ssh roberto@quasar.las.ic.unicamp.br"
 alias ssh-pulsar="ssh roberto@pulsar.itautec.inovasoft.unicamp.br"
 
@@ -56,7 +57,6 @@ fi
 
 alias encfs='encfs /mnt/gentoo/home/roberto/.encrypt/ /home/roberto/data'
 alias ps-group='ps x -o pid,pgid,comm'
-alias less='vim -'
 alias convert2mp3='~/scripts/convert2mp3.sh'
 alias order-music='~/scripts/music-order.py'
 alias tap='synclient TapButton1=1 VertEdgeScroll=0 HorizEdgeScroll=0'
@@ -65,6 +65,7 @@ alias yumc='sudo yum -C'
 alias lsof-ports='sudo lsof -i'
 alias netstat-ports='sudo netstat -lptu'
 alias mscreen="screen -c $HOME/.multiscreenrc"
+alias bewake='for i in $( seq 100 ); do echo $i; xdotool mousemove_relative 0 -1; sleep 100; done'
 
 # WORK ALIAS
 alias cvs-package="cvs -d :ext:rmhonji@cvs.opensource.ibm.com:/cvsroot/littleb checkout -P"
@@ -75,8 +76,8 @@ alias merge-tools="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/mcp7
 alias make-scratch="make CUSTOMER=mcp7.1-base srpm-scratch-build"
 alias make-rpm-scratch="make CUSTOMER=mcp7.1-base scratch-build"
 alias make-official="make CUSTOMER=mcp7.1-base tag build"
-alias mysql-hub1="mysql --host=mcpkjhub1.ltc.austin.ibm.com --user=guest --password=mcpekjhub1 mcpe"
-alias mysql-host="mysql --host=mcphost.ltc.austin.ibm.com --user=guest --password=mcpehost mcpe"
+alias mysql-hub1="mysql --host=mcpkjhub1.austin.ibm.com --user=guest --password=mcpekjhub1 mcpe"
+alias mysql-host="mysql --host=mcphost.austin.ibm.com --user=guest --password=mcpehost mcpe"
 alias vim-bash='vim ~/.bashrc && source ~/.bashrc'
 alias ctags-python='ctags --langdef=Python --recurse=yes --links=no --python-kinds=-i .'
 
