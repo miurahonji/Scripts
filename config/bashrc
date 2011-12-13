@@ -69,8 +69,13 @@ alias bewake='for i in $( seq 100 ); do echo $i; xdotool mousemove_relative 0 -1
 
 # WORK ALIAS
 alias cvs-package="cvs -d :ext:rmhonji@cvs.opensource.ibm.com:/cvsroot/littleb checkout -P"
-alias cvs-update='cvs update -d -P'
-alias cvs-diff='CVSDiff'
+alias cvs-python="function_cvs_python"
+function_cvs_python() {
+	cvs -d :ext:rmhonji@cvs.opensource.ibm.com:/cvsroot/littleb checkout -P $@ mcpe/tools/scripts/python
+}
+
+alias cvs-update='cvs update -d -P 2>&1 | grep -v "^cvs update:"'
+alias cvs-diff='CVSDiff 2>/dev/null'
 alias merge-rhel="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/rhel-mass-merge.sh makefile"
 alias merge-tools="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/mcp7.1-merge.sh"
 alias make-scratch="make CUSTOMER=mcp7.1-base srpm-scratch-build"
@@ -78,6 +83,7 @@ alias make-rpm-scratch="make CUSTOMER=mcp7.1-base scratch-build"
 alias make-official="make CUSTOMER=mcp7.1-base tag build"
 alias mysql-hub1="mysql --host=mcpkjhub1.austin.ibm.com --user=guest --password=mcpekjhub1 mcpe"
 alias mysql-host="mysql --host=mcphost.austin.ibm.com --user=guest --password=mcpehost mcpe"
+alias mysql-localhost="mysql --user=root --password=lets8it mcpe"
 alias vim-bash='vim ~/.bashrc && source ~/.bashrc'
 alias ctags-python='ctags --langdef=Python --recurse=yes --links=no --python-kinds=-i .'
 
