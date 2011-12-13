@@ -42,7 +42,7 @@ test "$3" == "send" && {
 	exit ${?}
 }
 
-STORE="/tmp/$1"
+test -z "$3" && STORE="/tmp/$1" || STORE="$3"
 mkdir -p ${STORE}
 scp -r $USER@$( echo ${SERVER} | cut -d : -f1 ):${__PATH__} ${STORE} && echo "Stored at ${STORE}"
 exit ${?}
