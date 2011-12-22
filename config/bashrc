@@ -66,6 +66,7 @@ alias lsof-ports='sudo lsof -i'
 alias netstat-ports='sudo netstat -lptu'
 alias mscreen="screen -c $HOME/.multiscreenrc"
 alias bewake='for i in $( seq 100 ); do echo $i; xdotool mousemove_relative 0 -1; sleep 100; done'
+alias ssh-cvs='ssh-agent /bin/bash && ssh-add ~/.ssh/id_rsa_cvs'
 
 # WORK ALIAS
 alias cvs-package="cvs -d :ext:rmhonji@cvs.opensource.ibm.com:/cvsroot/littleb checkout -P"
@@ -74,7 +75,7 @@ function_cvs_python() {
 	cvs -d :ext:rmhonji@cvs.opensource.ibm.com:/cvsroot/littleb checkout -P $@ mcpe/tools/scripts/python
 }
 
-alias cvs-update='cvs update -d -P 2>&1 | grep -v "^cvs update:"'
+alias cvs-update='find . -iname *.pyc -delete && cvs update -d -P 2>&1 | grep -v "^cvs update:"'
 alias cvs-diff='CVSDiff 2>/dev/null'
 alias merge-rhel="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/rhel-mass-merge.sh makefile"
 alias merge-tools="$HOME/merge_packages/littleb-tools/mcpe-tools/mass-merge/mcp7.1-merge.sh"
@@ -97,10 +98,7 @@ run_build() {
 }
 
 CVSDiff(){
-	find . -iname *.pyc |\
-	while read file; do
-		rm $file
-	done
+	find . -iname *.pyc -delete
 	cvs diff -Nu $@
 }
 	
